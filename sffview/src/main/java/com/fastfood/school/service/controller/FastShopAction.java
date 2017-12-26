@@ -31,15 +31,41 @@ public class FastShopAction {
 	
 	@RequestMapping(value="getFashShopById/{id}", method = RequestMethod.GET)
 	public FastShopModel getFashShopById(@PathVariable int id){
-		
 		return fastShopServiceImp.getFashShopById(id);
 		
 	}
 	
 	@RequestMapping(value="getMenuByFoodType/{id}", method = RequestMethod.GET)
 	public List<MenuModel> getMenuByFoodType(@PathVariable int id){
-		
 		return menuServiceImp.getMenuByFoodType(id);
 	}
+	
+	@RequestMapping(value="addOrder",method = RequestMethod.POST,consumes = "application/json")
+	public void addOrder(String username, String address, String telephone, String remark, Integer[] chcekFood){
+		
+		System.out.println(username);
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }
