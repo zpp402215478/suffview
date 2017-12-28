@@ -40,13 +40,6 @@ public class FastShopAction {
 		return menuServiceImp.getMenuByFoodType(id);
 	}
 	
-	@RequestMapping(value="addOrder",method = RequestMethod.POST,consumes = "application/json")
-	public void addOrder(String username, String address, String telephone, String remark, Integer[] chcekFood){
-		
-		System.out.println(username);
-		
-	}
-	
 	
 	
 	

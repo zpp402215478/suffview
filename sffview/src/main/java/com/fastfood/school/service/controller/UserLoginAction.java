@@ -10,19 +10,24 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fastfood.school.service.model.WeichatModel;
 import com.fastfood.school.service.utils.MyX509TrustManager;
+
+import net.sf.json.JSONObject;
 
 @RestController
 @RequestMapping("/userAction")
 public class UserLoginAction {
 
 	@RequestMapping(value="getWeichatUser",method = RequestMethod.GET)
-	public String getWeichatUser(String appid, String secret, String grant_type, String js_code){
+	public String getWeichatUser(HttpServletRequest request, String appid, String secret, String grant_type, String js_code){
 		String outputStr = null;
 		StringBuffer buffer=null;  
 	    try{  
@@ -34,7 +39,6 @@ public class UserLoginAction {
 	    //获取SSLSocketFactory对象  
 	    SSLSocketFactory ssf=sslContext.getSocketFactory();  
 	    String getUserUrl = "https://api.weixin.qq.com/sns/jscode2session?appid="+appid+"&secret="+secret+"&js_code="+js_code+"&grant_type="+grant_type;
-	   System.out.println(getUserUrl);
 	    URL url=new URL(getUserUrl);  
 	    HttpsURLConnection conn=(HttpsURLConnection)url.openConnection();  
 	    conn.setDoOutput(true);  
@@ -65,8 +69,13 @@ public class UserLoginAction {
 	        e.printStackTrace();  
 	    }  
 	   
+	    //{"session_key":"Eoyr8j9EyIxc2yeVB8cBSQ==","expires_in":7200,"openid":"o1Ekg0WWI17rC6oqvwTZqVpY8vTk"}
 	    //查询用户是否存在   不存在   存入到数据库中
-	    
+	   
+	    JSONObject fromObject = JSONObject.fromObject(buffer);
+	    WeichatModel weichat = (WeichatModel)JSONObject.toBean(fromObject);
+	    HttpSession session = request.getSession();
+	    session.setAttribute("weichat", weichat);
 	    return buffer.toString();  
 		
 	}
